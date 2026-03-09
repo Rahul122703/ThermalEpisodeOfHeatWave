@@ -1,0 +1,78 @@
+# -----------------------------
+# Python / Backend
+# -----------------------------
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+*.egg
+
+# Virtual environments
+venv/
+.env
+.env.*
+
+# Jupyter / temp
+.ipynb_checkpoints/
+
+# Python build
+build/
+dist/
+
+# -----------------------------
+# ML Model Files (optional)
+# comment this if you want to push models
+# -----------------------------
+# *.h5
+# *.hdf5
+# *.keras
+# *.pt
+# *.pth
+
+# -----------------------------
+# Node / Frontend
+# -----------------------------
+node_modules/
+dist/
+build/
+.cache/
+coverage/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# -----------------------------
+# Vite
+# -----------------------------
+.vite/
+
+# -----------------------------
+# OS files
+# -----------------------------
+.DS_Store
+Thumbs.db
+
+# -----------------------------
+# IDE / Editor
+# -----------------------------
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# -----------------------------
+# Misc
+# -----------------------------
+*.log
+*.tmp
+*.temp
