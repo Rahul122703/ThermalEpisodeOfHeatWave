@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 
+import icon from "../../../public/icon.png";
 export default function Navbar() {
   const [active, setActive] = useState("Forecast");
 
@@ -11,17 +12,12 @@ export default function Navbar() {
         <div className="flex flex-col md:flex-row md:items-center md:justify-between py-4 gap-4">
           {/* Logo */}
           <div className="flex items-center gap-3 cursor-pointer">
-            <div className="flex items-center justify-center w-11 h-11 rounded-xl bg-gradient-to-br from-orange-500 to-red-500 text-white shadow-md">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-5 h-5"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z" />
-              </svg>
+            <div className="w-11 h-11 rounded-xl overflow-hidden shadow-md border border-gray-200">
+              <img
+                src={icon}
+                alt="Heatwave Icon"
+                className="w-full h-full object-cover"
+              />
             </div>
 
             <div>
