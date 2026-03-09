@@ -1,0 +1,4 @@
+TO RUN THE PROJECT
+1. clone the project
+2. cd frontend and do npm install 
+3. and open another terminal in inside frontend and do "npx json-server --watch src/services/mockServer.json --port 5000" for fake API
