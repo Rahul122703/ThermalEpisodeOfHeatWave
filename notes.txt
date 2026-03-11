@@ -1,4 +1,12 @@
-TO RUN THE PROJECT
-1. clone the project
-2. cd frontend and do npm install 
-3. and open another terminal in inside frontend and do "npx json-server --watch src/services/mockServer.json --port 5000" for fake API
+1. the map used is free of cost but some maps are much better to use but are paid
+2. +1 +2 date selection
+    todays
+    dont add "+" instead add actual date
+3. seggregration of each REGION ,seasason,place type
+4. add cron job to mail the user about the heatwave
+
+
+premonsson
+monsson
+postmonsson
+winter
