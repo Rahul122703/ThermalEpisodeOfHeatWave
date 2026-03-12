@@ -5,22 +5,22 @@ import os
 
 from services.model_loader import get_model
 
-west_premonsoon_bp = Blueprint(
-    "west_premonsoon",
+west_postmonsoon_bp = Blueprint(
+    "west_postmonsoon",
     __name__,
-    url_prefix="/west-premonsoon"
+    url_prefix="/west-postmonsoon"
 )
 
 # absolute path to model
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-MODEL_PATH = os.path.join(BASE_DIR, "models", "k2_west_pre_monsoon.h5")
+MODEL_PATH = os.path.join(BASE_DIR, "models", "k2_west_postmonsoon.h5")
 
 
 def get_model_instance():
     return get_model(MODEL_PATH)
 
 
-@west_premonsoon_bp.route("/summary", methods=["GET"])
+@west_postmonsoon_bp.route("/summary", methods=["GET"])
 def model_summary():
 
     model = get_model_instance()
@@ -29,14 +29,14 @@ def model_summary():
     model.summary(print_fn=lambda x: stream.write(x + "\n"))
 
     return jsonify({
-        "model": "west-premonsoon",
+        "model": "west-postmonsoon",
         "input_shape": model.input_shape,
         "output_shape": model.output_shape,
         "summary": stream.getvalue()
     })
 
 
-@west_premonsoon_bp.route("/predict", methods=["GET"])
+@west_postmonsoon_bp.route("/predict", methods=["GET"])
 def predict():
 
     model = get_model_instance()
@@ -47,6 +47,6 @@ def predict():
     prediction = model.predict(sample_input)
 
     return jsonify({
-        "model": "west-premonsoon",
+        "model": "west-postmonsoon",
         "forecast_next_7_days": prediction.tolist()[0]
     })

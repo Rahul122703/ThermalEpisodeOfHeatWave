@@ -2,7 +2,8 @@ from flask import Flask, jsonify
 
 from routes.k2_west_winter import west_winter_bp
 from routes.k2_west_premonsoon import west_premonsoon_bp
-
+from routes.k2_west_monsoon import west_monsoon_bp
+from routes.k2_west_postmonsoon import west_postmonsoon_bp
 app = Flask(__name__)
 
 
@@ -15,7 +16,11 @@ def index():
             "/west-winter/summary",
             "/west-winter/predict",
             "/west-premonsoon/summary",
-            "/west-premonsoon/predict"
+            "/west-premonsoon/predict",
+            "/west-monsoon/summary",
+            "/west-monsoon/predict",
+            "/west-postmonsoon/summary",
+            "/west-postmonsoon/predict"
         ]
     })
 
@@ -23,7 +28,8 @@ def index():
 # register blueprints
 app.register_blueprint(west_winter_bp)
 app.register_blueprint(west_premonsoon_bp)
-
+app.register_blueprint(west_monsoon_bp)
+app.register_blueprint(west_postmonsoon_bp)
 
 @app.errorhandler(404)
 def not_found(e):
