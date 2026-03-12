@@ -8,7 +8,21 @@ import {
 } from "../../thunks/westThunks";
 
 const initialState = {
-  winter: null,
+  winter: null,  //data here is stored inthis format 
+  /*{
+  "forecast_next_7_days": [
+    35.98850631713867,
+    35.61729431152344,
+    35.301597595214844,
+    35.02092361450195,
+    34.76461410522461,
+    34.51368713378906,
+    34.2889404296875
+  ],
+  "model": "west-monsoon"
+}
+
+  */
   premonsoon: null,
   monsoon: null,
   postmonsoon: null,

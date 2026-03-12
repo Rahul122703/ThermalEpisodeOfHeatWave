@@ -1,9 +1,5 @@
-1. the map used is free of cost but some maps are much better to use but are paid
-2. +1 +2 date selection
-    todays
-    dont add "+" instead add actual date
-3. seggregration of each REGION ,seasason,place type
-4. add cron job to mail the user about the heatwave
+1. add cron job to mail the user about the heatwave
+2. AI generated Blog sperate page to show concequences for this heatwave 
 
 
 premonsson
