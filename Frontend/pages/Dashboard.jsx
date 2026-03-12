@@ -2,6 +2,7 @@ import React from "react";
 import Navbar from "../src/components/Layout/Navbar";
 import FilterPanel from "../src/components/Sidebar/FilterPanel";
 import IndiaHeatMap from "../src/components/HeatMap/IndiaHeatMap";
+import MapContainer from "../src/components/MapContainer";
 
 export default function Dashboard() {
   return (
@@ -58,8 +59,8 @@ export default function Dashboard() {
               </div>
 
               {/* Map Container */}
-              <div className="w-full h-[420px] md:h-[500px] lg:h-[540px] rounded-lg overflow-hidden border border-gray-200">
-                <IndiaHeatMap />
+              <div className="w-full h-full   border border-none rounded-lg overflow-hidden ">
+                <MapContainer />
               </div>
             </div>
           </section>

@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from "react";
-
 import { temperatureData } from "../../api/data";
 
 import Map from "ol/Map";
@@ -15,10 +14,9 @@ import Feature from "ol/Feature";
 import Point from "ol/geom/Point";
 
 import GeoJSON from "ol/format/GeoJSON";
-
 import { fromLonLat } from "ol/proj";
 
-import { Style, Stroke } from "ol/style";
+import { Style, Stroke, Fill } from "ol/style";
 
 export default function IndiaHeatMap() {
   const mapRef = useRef(null);
@@ -31,7 +29,7 @@ export default function IndiaHeatMap() {
        HEATMAP POINTS
     -------------------------- */
 
-    const features = temperatureData.temperature.map((p) => {
+    const heatFeatures = temperatureData.temperature.map((p) => {
       const feature = new Feature({
         geometry: new Point(fromLonLat([p.lng, p.lat])),
       });
@@ -40,31 +38,40 @@ export default function IndiaHeatMap() {
       return feature;
     });
 
-    const vectorSource = new VectorSource({
-      features,
-    });
-
     const heatLayer = new HeatmapLayer({
-      source: vectorSource,
+      source: new VectorSource({ features: heatFeatures }),
       blur: 35,
       radius: 25,
-      weight: (feature) => feature.get("weight"),
+      weight: (f) => f.get("weight"),
     });
 
     /* -------------------------
-       INDIA BOUNDARY LAYER
+       REGION SOURCE
     -------------------------- */
 
-    const indiaSource = new VectorSource();
+    const regionSource = new VectorSource();
 
-    const indiaLayer = new VectorLayer({
-      source: indiaSource,
-      style: new Style({
-        stroke: new Stroke({
-          color: "#111827",
-          width: 2,
+    const regionColors = {
+      north: "rgba(255,0,0,0.2)",
+      west: "rgba(255,165,0,0.2)",
+      central: "rgba(255,255,0,0.2)",
+      east: "rgba(0,0,255,0.2)",
+      south: "rgba(0,128,0,0.2)",
+      northeast: "rgba(128,0,255,0.2)",
+    };
+
+    const regionLayer = new VectorLayer({
+      source: regionSource,
+      style: (feature) =>
+        new Style({
+          stroke: new Stroke({
+            color: "#000",
+            width: 3,
+          }),
+          fill: new Fill({
+            color: regionColors[feature.get("region")] || "rgba(200,200,200,0.2)",
+          }),
         }),
-      }),
     });
 
     /* -------------------------
@@ -74,43 +81,31 @@ export default function IndiaHeatMap() {
     const map = new Map({
       target: mapRef.current,
       layers: [
-        new TileLayer({
-          source: new OSM(),
-        }),
+        new TileLayer({ source: new OSM() }),
         heatLayer,
-        indiaLayer,
+        regionLayer,
       ],
       view: new View({
         center: fromLonLat([78.6569, 22.9734]),
         zoom: 5,
-        minZoom: 4,
-        maxZoom: 7,
       }),
     });
 
     mapInstance.current = map;
 
     /* -------------------------
-       LOAD INDIA GEOJSON
+       LOAD REGION GEOJSON
     -------------------------- */
 
-    fetch(
-      "https://raw.githubusercontent.com/johan/world.geo.json/master/countries/IND.geo.json",
-    )
+    fetch("/regions.geojson")
       .then((res) => res.json())
       .then((data) => {
         const features = new GeoJSON().readFeatures(data, {
           featureProjection: "EPSG:3857",
         });
 
-        indiaSource.addFeatures(features);
+        features.forEach((f) => regionSource.addFeature(f));
       });
-
-    /* Fix map size */
-
-    setTimeout(() => {
-      map.updateSize();
-    }, 200);
 
     return () => {
       map.setTarget(null);
@@ -118,7 +113,5 @@ export default function IndiaHeatMap() {
     };
   }, []);
 
-  return (
-    <div ref={mapRef} className="w-full h-full rounded-lg overflow-hidden" />
-  );
+  return <div ref={mapRef} className="w-full h-full" />;
 }
