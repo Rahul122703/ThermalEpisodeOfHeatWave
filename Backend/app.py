@@ -1,11 +1,15 @@
 from flask import Flask, jsonify
+from flask_cors import CORS
 
 from routes.k2_west_winter import west_winter_bp
 from routes.k2_west_premonsoon import west_premonsoon_bp
 from routes.k2_west_monsoon import west_monsoon_bp
 from routes.k2_west_postmonsoon import west_postmonsoon_bp
+
 app = Flask(__name__)
 
+# Allow requests from all origins
+CORS(app, origins=["http://localhost:5173"])
 
 @app.route("/", methods=["GET"])
 def index():
@@ -30,6 +34,7 @@ app.register_blueprint(west_winter_bp)
 app.register_blueprint(west_premonsoon_bp)
 app.register_blueprint(west_monsoon_bp)
 app.register_blueprint(west_postmonsoon_bp)
+
 
 @app.errorhandler(404)
 def not_found(e):
