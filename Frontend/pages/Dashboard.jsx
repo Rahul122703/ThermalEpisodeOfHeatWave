@@ -35,29 +35,6 @@ export default function Dashboard() {
           {/* Map Section */}
           <section className="lg:col-span-9">
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
-              {/* Map Header */}
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-3">
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-800">
-                    Maximum Temperature
-                  </h3>
-                  <p className="text-sm text-gray-500">
-                    Heat distribution across regions
-                  </p>
-                </div>
-
-                {/* Toggle placeholder for Heatwave Warning */}
-                <div className="flex items-center gap-3">
-                  <span className="text-sm text-gray-600">
-                    Heatwave Warning
-                  </span>
-
-                  <button className="relative inline-flex h-6 w-11 items-center rounded-full bg-blue-600 transition">
-                    <span className="inline-block h-4 w-4 transform rounded-full bg-white translate-x-6 transition" />
-                  </button>
-                </div>
-              </div>
-
               {/* Map Container */}
               <div className="w-full h-full   border border-none rounded-lg overflow-hidden ">
                 <MapContainer />
