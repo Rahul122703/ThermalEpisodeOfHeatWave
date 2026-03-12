@@ -29,9 +29,7 @@ export default function createRegionLayer(regionSource) {
         text: new Text({
           text: region.toUpperCase(),
           font: "bold 16px Arial",
-          fill: new Fill({
-            color: "#000",
-          }),
+          fill: new Fill({ color: "#000" }),
           stroke: new Stroke({
             color: "#fff",
             width: 3,
