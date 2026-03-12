@@ -16,7 +16,7 @@ export default function MapContainer() {
   return (
     <div
       ref={containerRef}
-      className="relative w-full h-[350px] sm:h-[420px] lg:flex-1 rounded-lg overflow-hidden border border-gray-200"
+      className="relative w-full h-[calc(100dvh-12rem)] lg:flex-1 rounded-lg overflow-hidden border border-gray-200"
     >
       {/* Fullscreen Button */}
       <button

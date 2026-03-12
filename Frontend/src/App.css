@@ -1,1 +1,61 @@
 @import "tailwindcss";
+/* gradient text for brand */
+.gradient-text {
+  background: linear-gradient(90deg, #0ea5e9, #6366f1, #06b6d4);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: gradient-shift 3s linear infinite;
+  background-size: 200% 200%;
+}
+
+/* keyframes for smooth gradient motion */
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* hamburger lines */
+.hamburger-line {
+  position: absolute;
+  left: 18%;
+  right: 18%;
+  height: 2px;
+  background-color: #374151; /* gray-700 */
+  border-radius: 2px;
+  transition: transform 250ms cubic-bezier(.2,.9,.3,1), opacity 200ms, top 200ms;
+  display: block;
+}
+
+/* positions */
+.hamburger-line.top { top: 28%; transform-origin: center; }
+.hamburger-line.middle { top: 50%; transform-origin: center; }
+.hamburger-line.bottom { top: 72%; transform-origin: center; }
+
+/* open state -> morph to X */
+.hamburger-line.top.open {
+  top: 50%;
+  transform: rotate(45deg) translateY(-50%);
+}
+.hamburger-line.middle.open {
+  opacity: 0;
+  transform: scaleX(0.2);
+}
+.hamburger-line.bottom.open {
+  top: 50%;
+  transform: rotate(-45deg) translateY(-50%);
+}
+
+/* small-screen tweak so menu fits without taking space */
+@media (max-width: 640px) {
+  header .gradient-text { font-size: 0.95rem; }
+  .hamburger-line { left: 20%; right: 20%; }
+  .pointer-events-auto { right: 12px; }
+}
+
+/* ensure floating menu keeps small footprint on larger viewports */
+@media (min-width: 1024px) {
+  .pointer-events-auto { right: 32px; }
+}
+

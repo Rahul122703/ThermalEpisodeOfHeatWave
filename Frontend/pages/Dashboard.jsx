@@ -12,17 +12,6 @@ export default function Dashboard() {
 
       {/* Main Content */}
       <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        {/* Dashboard Title */}
-        <div className="mb-6">
-          <h2 className="text-2xl font-semibold text-gray-800">
-            Heatwave Forecast Dashboard
-          </h2>
-          <p className="text-sm text-gray-500 mt-1">
-            Monitor predicted maximum temperatures and potential heatwave zones
-            across India.
-          </p>
-        </div>
-
         {/* Layout Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Sidebar */}
