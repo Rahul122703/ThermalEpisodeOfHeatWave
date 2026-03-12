@@ -8,8 +8,7 @@ from routes.k2_west_postmonsoon import west_postmonsoon_bp
 
 app = Flask(__name__)
 
-# Allow requests from all origins
-CORS(app, origins=["http://localhost:5173"])
+CORS(app, origins=["http://localhost:5173","https://pyrkheatwave.vercel.app"])
 
 @app.route("/", methods=["GET"])
 def index():
