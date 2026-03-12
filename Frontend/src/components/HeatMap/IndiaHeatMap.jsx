@@ -12,31 +12,43 @@ import VectorSource from "ol/source/Vector";
 import createRegionLayer from "./createRegionLayer";
 import loadRegions from "./loadRegions";
 import createHeatLayer from "./createHeatLayer";
-import { westHeatPoints } from "./westHeatPoints";
+import generateWestHeatPoints from "./generateWestHeatPoints";
+
+// Convert "Mar 12" → forecast index
+function getForecastIndex(selectedDate) {
+  const today = new Date();
+
+  const [month, day] = selectedDate.split(" ");
+
+  const selected = new Date(`${month} ${day}, ${today.getFullYear()}`);
+
+  const diff = Math.floor((selected - today) / (1000 * 60 * 60 * 24));
+
+  return Math.max(0, diff);
+}
 
 export default function IndiaHeatMap() {
   const mapRef = useRef(null);
   const mapInstance = useRef(null);
   const heatLayerRef = useRef(null);
 
-  const { selectedRegion, selectedSeason, selectedDate, dates } =
-    useSelector((state) => state.filter);
+  const { selectedSeason, selectedDate, selectedRegion } = useSelector(
+    (state) => state.filter,
+  );
 
-  const west = useSelector((state) => state.west);
+  const westData = useSelector((state) => state.west);
 
-  // create map once
+  // create map only once
   useEffect(() => {
     if (mapInstance.current) return;
 
     const regionSource = new VectorSource();
+
     const regionLayer = createRegionLayer(regionSource);
 
     const map = new Map({
       target: mapRef.current,
-      layers: [
-        new TileLayer({ source: new OSM() }),
-        regionLayer,
-      ],
+      layers: [new TileLayer({ source: new OSM() }), regionLayer],
       view: new View({
         center: fromLonLat([78.6569, 22.9734]),
         zoom: 5,
@@ -53,41 +65,87 @@ export default function IndiaHeatMap() {
     };
   }, []);
 
-  // update heatmap when filters change
+  // update heatmap + temperature label
   useEffect(() => {
     if (!mapInstance.current) return;
-    if (selectedRegion !== "West") return;
 
-    let seasonData = null;
+    if (selectedRegion.toLowerCase() !== "west") return;
 
-    if (selectedSeason === "Winter") seasonData = west.winter;
-    if (selectedSeason === "Premonsoon") seasonData = west.premonsoon;
-    if (selectedSeason === "Monsoon") seasonData = west.monsoon;
-    if (selectedSeason === "Postmonsoon") seasonData = west.postmonsoon;
+    let forecastData = null;
 
-    if (!seasonData) return;
+    switch (selectedSeason) {
+      case "Winter":
+        forecastData = westData.winter;
+        break;
 
-    const dateIndex = dates.indexOf(selectedDate);
+      case "Premonsoon":
+        forecastData = westData.premonsoon;
+        break;
 
-    const temperature =
-      seasonData?.forecast_next_7_days?.[dateIndex];
+      case "Monsoon":
+        forecastData = westData.monsoon;
+        break;
 
-    if (temperature === undefined) return;
+      case "Postmonsoon":
+        forecastData = westData.postmonsoon;
+        break;
 
-    const heatData = {
-      temperature: westHeatPoints(temperature),
-    };
-
-    const heatLayer = createHeatLayer(heatData);
-
-    if (heatLayerRef.current) {
-      mapInstance.current.removeLayer(heatLayerRef.current);
+      default:
+        break;
     }
 
-    mapInstance.current.addLayer(heatLayer);
-    heatLayerRef.current = heatLayer;
+    if (!forecastData) return;
 
-  }, [selectedDate, selectedSeason, selectedRegion, west]);
+    const index = getForecastIndex(selectedDate);
 
-  return <div ref={mapRef} className="w-full h-full" />;
+    const temperature = forecastData?.forecast_next_7_days?.[index];
+
+    if (temperature == null) return;
+
+    // update region label temperature
+    const features = mapInstance.current
+      .getLayers()
+      .item(1)
+      .getSource()
+      .getFeatures();
+
+    features.forEach((feature) => {
+      const regionName = feature.get("region");
+
+      if (regionName?.toLowerCase() === "west") {
+        feature.set("temperature", temperature);
+
+        feature.changed();
+      }
+    });
+
+    // update heatmap
+    async function updateHeatmap() {
+      const heatPoints = await generateWestHeatPoints(temperature);
+
+      const heatLayer = createHeatLayer({
+        temperature: heatPoints,
+      });
+
+      if (heatLayerRef.current) {
+        mapInstance.current.removeLayer(heatLayerRef.current);
+      }
+
+      mapInstance.current.addLayer(heatLayer);
+
+      heatLayerRef.current = heatLayer;
+    }
+
+    updateHeatmap();
+  }, [selectedSeason, selectedDate, selectedRegion, westData]);
+
+  return (
+    <div
+      ref={mapRef}
+      style={{
+        width: "100%",
+        height: "600px",
+      }}
+    />
+  );
 }

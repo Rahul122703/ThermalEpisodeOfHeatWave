@@ -15,6 +15,13 @@ export default function createRegionLayer(regionSource) {
     source: regionSource,
     style: (feature) => {
       const region = feature.get("region") || "";
+      const temperature = feature.get("temperature");
+
+      let label = region.toUpperCase();
+
+      if (temperature != null) {
+        label = `${region.toUpperCase()}\n${temperature.toFixed(1)}°C`;
+      }
 
       return new Style({
         stroke: new Stroke({
@@ -27,7 +34,7 @@ export default function createRegionLayer(regionSource) {
         }),
 
         text: new Text({
-          text: region.toUpperCase(),
+          text: label,
           font: "bold 16px Arial",
           fill: new Fill({ color: "#000" }),
           stroke: new Stroke({
