@@ -14,7 +14,7 @@ west_premonsoon_bp = Blueprint(
 
 # absolute path to model
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-MODEL_PATH = os.path.join(BASE_DIR, "models", "k2_west_premonsoon.h5")
+MODEL_PATH = os.path.join(BASE_DIR, "models", "k2_west_pre_monsoon.h5")
 
 
 def get_model_instance():
