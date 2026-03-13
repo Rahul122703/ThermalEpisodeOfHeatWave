@@ -8,9 +8,8 @@ from services.model_loader import get_model
 north_postmonsoon_bp = Blueprint(
     "north_postmonsoon",
     __name__,
-    url_prefix="/north-premonsoon"
+    url_prefix="/north-postmonsoon"
 )
-
 # absolute path to model
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MODEL_PATH = os.path.join(BASE_DIR, "models", "k2_north_postmonsoon.h5")
