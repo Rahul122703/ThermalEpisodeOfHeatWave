@@ -12,7 +12,9 @@ import VectorSource from "ol/source/Vector";
 import createRegionLayer from "./createRegionLayer";
 import loadRegions from "./loadRegions";
 import createHeatLayer from "./createHeatLayer";
+
 import generateWestHeatPoints from "./generateWestHeatPoints";
+import generateNorthHeatPoints from "./generateNorthHeatPoints";
 
 // Convert "Mar 12" → forecast index
 function getForecastIndex(selectedDate) {
@@ -37,13 +39,13 @@ export default function IndiaHeatMap() {
   );
 
   const westData = useSelector((state) => state.west);
+  const northData = useSelector((state) => state.north);
 
-  // create map only once
+  // create map once
   useEffect(() => {
     if (mapInstance.current) return;
 
     const regionSource = new VectorSource();
-
     const regionLayer = createRegionLayer(regionSource);
 
     const map = new Map({
@@ -65,33 +67,54 @@ export default function IndiaHeatMap() {
     };
   }, []);
 
-  // update heatmap + temperature label
+  // update heatmap
   useEffect(() => {
     if (!mapInstance.current) return;
 
-    if (selectedRegion.toLowerCase() !== "west") return;
-
     let forecastData = null;
 
-    switch (selectedSeason) {
-      case "Winter":
-        forecastData = westData.winter;
-        break;
+    /*
+      WEST REGION DATA
+    */
+    if (selectedRegion === "West") {
+      switch (selectedSeason) {
+        case "Winter":
+          forecastData = westData.winter;
+          break;
 
-      case "Premonsoon":
-        forecastData = westData.premonsoon;
-        break;
+        case "Premonsoon":
+          forecastData = westData.premonsoon;
+          break;
 
-      case "Monsoon":
-        forecastData = westData.monsoon;
-        break;
+        case "Monsoon":
+          forecastData = westData.monsoon;
+          break;
 
-      case "Postmonsoon":
-        forecastData = westData.postmonsoon;
-        break;
+        case "Postmonsoon":
+          forecastData = westData.postmonsoon;
+          break;
 
-      default:
-        break;
+        default:
+          break;
+      }
+    }
+
+    /*
+      NORTH REGION DATA
+    */
+    if (selectedRegion === "North") {
+      switch (selectedSeason) {
+        case "Monsoon":
+          forecastData = northData.monsoon;
+          break;
+
+        case "Postmonsoon":
+          forecastData = northData.postmonsoon;
+          break;
+
+        default:
+          break;
+      }
     }
 
     if (!forecastData) return;
@@ -102,7 +125,9 @@ export default function IndiaHeatMap() {
 
     if (temperature == null) return;
 
-    // update region label temperature
+    /*
+      UPDATE REGION LABEL TEMPERATURE
+    */
     const features = mapInstance.current
       .getLayers()
       .item(1)
@@ -112,16 +137,25 @@ export default function IndiaHeatMap() {
     features.forEach((feature) => {
       const regionName = feature.get("region");
 
-      if (regionName?.toLowerCase() === "west") {
+      if (regionName?.toLowerCase() === selectedRegion.toLowerCase()) {
         feature.set("temperature", temperature);
-
         feature.changed();
       }
     });
 
-    // update heatmap
+    /*
+      UPDATE HEATMAP
+    */
     async function updateHeatmap() {
-      const heatPoints = await generateWestHeatPoints(temperature);
+      let heatPoints = [];
+
+      if (selectedRegion === "West") {
+        heatPoints = await generateWestHeatPoints(temperature);
+      }
+
+      if (selectedRegion === "North") {
+        heatPoints = await generateNorthHeatPoints(temperature);
+      }
 
       const heatLayer = createHeatLayer({
         temperature: heatPoints,
@@ -137,7 +171,7 @@ export default function IndiaHeatMap() {
     }
 
     updateHeatmap();
-  }, [selectedSeason, selectedDate, selectedRegion, westData]);
+  }, [selectedSeason, selectedDate, selectedRegion, westData, northData]);
 
   return (
     <div
