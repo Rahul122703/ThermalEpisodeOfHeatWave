@@ -15,6 +15,7 @@ import {
 } from "../../../thunks/westThunks";
 
 import {
+  fetchNorthPremonsoonPredict,
   fetchNorthMonsoonPredict,
   fetchNorthPostmonsoonPredict,
 } from "../../../thunks/northThunks";
@@ -36,7 +37,7 @@ export default function FilterPanel() {
   */
   const REGION_SEASONS = {
     West: ["Premonsoon", "Monsoon", "Postmonsoon", "Winter"],
-    North: ["Monsoon", "Postmonsoon"],
+    North: ["Premonsoon", "Monsoon", "Postmonsoon"],
   };
 
   /*
@@ -51,6 +52,7 @@ export default function FilterPanel() {
     },
 
     North: {
+      Premonsoon: fetchNorthPremonsoonPredict,
       Monsoon: fetchNorthMonsoonPredict,
       Postmonsoon: fetchNorthPostmonsoonPredict,
     },

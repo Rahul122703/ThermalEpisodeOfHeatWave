@@ -7,7 +7,7 @@ from routes.k2_west_monsoon import west_monsoon_bp
 from routes.k2_west_postmonsoon import west_postmonsoon_bp
 from routes.k2_north_monsoon import north_monsoon_bp
 from routes.k2_north_postmonsoon import north_postmonsoon_bp
-
+from routes.k2_north_premonsoon import north_premonsoon_bp
 app = Flask(__name__)
 
 CORS(app, origins=["http://localhost:5173","https://pyrkheatwave.vercel.app"])
@@ -22,8 +22,9 @@ def index():
             "/west-premonsoon/predict",
             "/west-monsoon/predict",
             "/west-postmonsoon/predict",
+            "/north-premonsoon/predict",
             "/north-monsoon/predict",
-            "/north-postmonsoon/predict"
+            "/north-postmonsoon/predict",
         ]
     })
 
@@ -35,6 +36,7 @@ app.register_blueprint(west_monsoon_bp)
 app.register_blueprint(west_postmonsoon_bp)
 app.register_blueprint(north_monsoon_bp)
 app.register_blueprint(north_postmonsoon_bp)
+app.register_blueprint(north_premonsoon_bp)
 
 @app.errorhandler(404)
 def not_found(e):

@@ -1,11 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 import {
+  fetchNorthPremonsoonPredict,
   fetchNorthMonsoonPredict,
   fetchNorthPostmonsoonPredict,
 } from "../../thunks/northThunks";
 
 const initialState = {
+  premonsoon: null,
   monsoon: null,
   postmonsoon: null,
 
@@ -20,6 +22,20 @@ const northSlice = createSlice({
 
   extraReducers: (builder) => {
     builder
+
+      // NORTH PRE MONSOON
+      .addCase(fetchNorthPremonsoonPredict.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchNorthPremonsoonPredict.fulfilled, (state, action) => {
+        state.loading = false;
+        state.premonsoon = action.payload;
+      })
+      .addCase(fetchNorthPremonsoonPredict.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
 
       // NORTH MONSOON
       .addCase(fetchNorthMonsoonPredict.pending, (state) => {
