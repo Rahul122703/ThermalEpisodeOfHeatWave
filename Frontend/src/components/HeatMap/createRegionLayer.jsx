@@ -26,7 +26,7 @@ export default function createRegionLayer(regionSource) {
       return new Style({
         stroke: new Stroke({
           color: "#000",
-          width: 3,
+          width: 1,
         }),
 
         fill: new Fill({
