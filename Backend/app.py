@@ -5,6 +5,8 @@ from routes.k2_west_winter import west_winter_bp
 from routes.k2_west_premonsoon import west_premonsoon_bp
 from routes.k2_west_monsoon import west_monsoon_bp
 from routes.k2_west_postmonsoon import west_postmonsoon_bp
+from routes.k2_north_monsoon import north_monsoon_bp
+from routes.k2_north_postmonsoon import north_postmonsoon_bp
 
 app = Flask(__name__)
 
@@ -16,14 +18,12 @@ def index():
         "status": "running",
         "message": "Weather Forecast API is active",
         "available_endpoints": [
-            "/west-winter/summary",
             "/west-winter/predict",
-            "/west-premonsoon/summary",
             "/west-premonsoon/predict",
-            "/west-monsoon/summary",
             "/west-monsoon/predict",
-            "/west-postmonsoon/summary",
-            "/west-postmonsoon/predict"
+            "/west-postmonsoon/predict",
+            "/north-monsoon/predict",
+            "/north-postmonsoon/predict"
         ]
     })
 
@@ -33,7 +33,8 @@ app.register_blueprint(west_winter_bp)
 app.register_blueprint(west_premonsoon_bp)
 app.register_blueprint(west_monsoon_bp)
 app.register_blueprint(west_postmonsoon_bp)
-
+app.register_blueprint(north_monsoon_bp)
+app.register_blueprint(north_postmonsoon_bp)
 
 @app.errorhandler(404)
 def not_found(e):
